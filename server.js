@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 const app = express();
+app.use(express.static(__dirname));
 app.use(cors());
 app.use(express.json());
 
@@ -38,6 +39,11 @@ app.post("/login", async (req, res) => {
   else res.status(401).send("Invalid credentials");
 });
 
+// Home route
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/script.html");
+});
+
 // Mark attendance
 app.post("/mark-attendance", async (req, res) => {
   const { email, present } = req.body;
@@ -57,4 +63,8 @@ app.get("/attendance/:email", async (req, res) => {
   res.send({ percentage });
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+const PORT = process.env.PORT || 5000;
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/script.html");
+});
+app.listen(PORT, () => console.log("Server running"));
